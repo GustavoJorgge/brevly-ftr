@@ -2,33 +2,37 @@ import { db } from "@/infra/db";
 import { schema } from "@/infra/db/schemas";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { links } from "./../../db/schemas/links";
+import { enviaUrl } from "@/app/enviaUrl";
 
 export const InputLinkRoute: FastifyPluginAsyncZod = async (server) => {
   server.post(
-    "/link",
+    "/links",
     {
       schema: {
-        summary: "Input Link",
+        summary: "Gerar Link",
         body: z.object({
-          urlOriginal: z.string(),
-          urlNova: z.string().optional(),
+          originalUrl: z.string(),
+          shortUrl: z.string(),
         }),
         response: {
           200: z.object({ urlNova: z.string() }),
           409: z
             .object({ message: z.string() })
-            .describe("URL ja cadastrada na base."),
+            .describe("URL já cadastrada na base."),
         },
       },
     },
     async (request, reply) => {
-      await db.insert(schema.links).values({
-        originalUrl: "http://teste.com.br",
-        remoteKey: "teste.com.br",
-        shortUrl: "http://teste.com.br",
+      const { originalUrl, shortUrl } = request.body;
+
+      const remoteKey = shortUrl.replace(/^https?:\/\//, "");
+
+      await enviaUrl({
+        originalUrl,
+        shortUrl,
+        remoteKey,
       });
-      return reply.status(200).send({ urlNova: "gerado corretamente" });
+      return reply.status(200).send({ urlNova: shortUrl });
     }
   );
 };

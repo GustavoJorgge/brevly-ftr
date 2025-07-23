@@ -7,7 +7,7 @@ import {
   hasZodFastifySchemaValidationErrors,
   jsonSchemaTransform,
 } from "fastify-type-provider-zod";
-import { InputLinkRoute } from "./routes/post-link";
+import { InputLinkRoute } from "./routes/inputLinkRoute";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 
