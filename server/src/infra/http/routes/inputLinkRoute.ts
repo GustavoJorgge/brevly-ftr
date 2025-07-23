@@ -1,8 +1,6 @@
-import { db } from "@/infra/db";
-import { schema } from "@/infra/db/schemas";
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { enviaUrl } from "@/app/enviaUrl";
+import { enviaUrl } from "@/app/functions/enviaUrl";
 
 export const InputLinkRoute: FastifyPluginAsyncZod = async (server) => {
   server.post(
