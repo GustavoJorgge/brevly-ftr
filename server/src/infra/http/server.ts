@@ -7,7 +7,7 @@ import {
   hasZodFastifySchemaValidationErrors,
   jsonSchemaTransform,
 } from "fastify-type-provider-zod";
-import { InputLinkRoute } from "./routes/inputLinkRoute";
+import { linksRoute } from "./routes/linksRoute";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
 
@@ -46,7 +46,7 @@ server.register(fastifySwaggerUi, {
   routePrefix: "/docs",
 });
 
-server.register(InputLinkRoute);
+server.register(linksRoute);
 
 console.log(env.DATABASE_URL);
 

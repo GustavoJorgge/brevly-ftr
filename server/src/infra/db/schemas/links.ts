@@ -1,6 +1,5 @@
-import { randomUUID } from "crypto";
 import { uuidv7 } from "uuidv7";
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, integer } from "drizzle-orm/pg-core";
 
 export const links = pgTable("links", {
   urlId: text("url_id")
@@ -8,6 +7,6 @@ export const links = pgTable("links", {
     .$defaultFn(() => uuidv7()),
   originalUrl: text("url_original").notNull(),
   shortUrl: text("short_url").notNull().unique(),
-  remoteKey: text("remote_key").notNull().unique(),
+  qtdAcesso: integer("qtd_acesso").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

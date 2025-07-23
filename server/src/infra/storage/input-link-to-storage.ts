@@ -7,14 +7,13 @@ import { env } from "../env";
 const inputLinkToStorageSchema = z.object({
   originalUrl: z.string(),
   shortUrl: z.string(),
-  remoteKey: z.string(),
   contentType: z.string(),
 });
 
 type InputLinkToStorageSchema = z.input<typeof inputLinkToStorageSchema>;
 
 export async function inputLinkToStorage(input: InputLinkToStorageSchema) {
-  const { originalUrl, shortUrl, remoteKey, contentType } =
+  const { originalUrl, shortUrl, contentType } =
     inputLinkToStorageSchema.parse(input);
 
   const uniqueName = `${randomUUID()}-${shortUrl}`;
@@ -22,7 +21,6 @@ export async function inputLinkToStorage(input: InputLinkToStorageSchema) {
   const content = JSON.stringify({
     originalUrl,
     shortUrl,
-    remoteKey,
     createdAt: new Date().toISOString(),
   });
 
