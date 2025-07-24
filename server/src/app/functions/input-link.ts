@@ -10,7 +10,7 @@ const linkInputSchema = z.object({
 
 type LinkInput = z.infer<typeof linkInputSchema>;
 
-export async function enviaUrl(input: LinkInput) {
+export async function inputLink(input: LinkInput) {
   const { originalUrl, shortUrl } = linkInputSchema.parse(input);
 
   // Salva no Cloudflare R2

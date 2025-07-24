@@ -22,8 +22,8 @@ Este é um projeto de encurtador de links, com funcionalidades como criação, l
 
 ### 📄 Listagem de Links
 
-- [ ] Deve ser possível **listar todas as URL’s cadastradas**
-- [ ] Deve ser possível realizar a listagem de forma **performática**
+- [✅] Deve ser possível **listar todas as URL’s cadastradas**
+- [✅] Deve ser possível realizar a listagem de forma **performática**
 
 ### 📈 Rastreamento de Acessos
 

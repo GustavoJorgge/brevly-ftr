@@ -1,10 +1,12 @@
 import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
-import { enviaUrl } from "@/app/functions/enviaUrl";
+import { inputLink } from "@/app/functions/input-link";
 import { db } from "@/infra/db";
 import { schema } from "@/infra/db/schemas";
 import { desc, eq } from "drizzle-orm";
 import { getLink } from "@/app/functions/get-uploads";
+import { exportLinks } from "@/app/functions/export-links-csv";
+import { unwrapEither } from "@/infra/shared/either";
 
 export const linksRoute: FastifyPluginAsyncZod = async (server) => {
   server.post(
@@ -38,7 +40,7 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
           .send({ message: "Url encurtada já existe na base." });
       }
 
-      await enviaUrl({
+      await inputLink({
         originalUrl,
         shortUrl,
       });
@@ -88,6 +90,35 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
       });
 
       return reply.status(200).send({ links });
+    }
+  );
+
+  server.post(
+    "/links/exports",
+    {
+      schema: {
+        summary: "Exporta Links em csv.",
+        description:
+          "Retorna uma lista com todos os links encurtados ordenados por data de criação (mais recentes primeiro)",
+        querystring: z.object({
+          searchQuery: z.string().optional(),
+        }),
+        response: {
+          200: z.object({
+            reportUrl: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { searchQuery } = request.query;
+
+      const result = await exportLinks({
+        searchQuery,
+      });
+
+      const { reportUrl } = unwrapEither(result);
+      return reply.status(200).send({ reportUrl });
     }
   );
 };
