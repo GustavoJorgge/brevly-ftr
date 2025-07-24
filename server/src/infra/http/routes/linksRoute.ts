@@ -6,7 +6,8 @@ import { schema } from "@/infra/db/schemas";
 import { desc, eq } from "drizzle-orm";
 import { getLink } from "@/app/functions/get-uploads";
 import { exportLinks } from "@/app/functions/export-links-csv";
-import { unwrapEither } from "@/infra/shared/either";
+import { isLeft, unwrapEither } from "@/infra/shared/either";
+import { deleteLink } from "@/app/functions/delete-link";
 
 export const linksRoute: FastifyPluginAsyncZod = async (server) => {
   server.post(
@@ -119,6 +120,38 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
 
       const { reportUrl } = unwrapEither(result);
       return reply.status(200).send({ reportUrl });
+    }
+  );
+
+  server.delete(
+    "/links/:id",
+    {
+      schema: {
+        summary: "Delete a link by ID",
+        params: z.object({
+          id: z.string().nonempty(),
+        }),
+        tags: ["links"],
+        response: {
+          204: z.null(),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const result = await deleteLink({
+        urlId: request.params.id,
+      });
+
+      if (isLeft(result)) {
+        const unwrapedResult = unwrapEither(result);
+
+        return reply.status(404).send({ message: unwrapedResult.message });
+      }
+
+      return reply.status(204).send();
     }
   );
 };

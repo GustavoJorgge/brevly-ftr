@@ -31,14 +31,14 @@ Este é um projeto de encurtador de links, com funcionalidades como criação, l
 
 ### 📤 Exportação para CSV
 
-- [ ] Deve ser possível **exportar os links criados em um CSV**
-  - [ ] Deve ser possível acessar o **CSV por meio de uma CDN** (Amazon S3, Cloudflare R2, etc)
-  - [ ] Deve ser **gerado um nome aleatório e único para o arquivo**
-  - [ ] O CSV deve conter os seguintes campos:
-    - [ ] URL original
-    - [ ] URL encurtada
-    - [ ] Contagem de acessos
-    - [ ] Data de criação
+- [✅] Deve ser possível **exportar os links criados em um CSV**
+  - [✅] Deve ser possível acessar o **CSV por meio de uma CDN** (Amazon S3, Cloudflare R2, etc)
+  - [✅] Deve ser **gerado um nome aleatório e único para o arquivo**
+  - [✅] O CSV deve conter os seguintes campos:
+    - [✅] URL original
+    - [✅] URL encurtada
+    - [✅] Contagem de acessos
+    - [✅] Data de criação
 
 ---
 
