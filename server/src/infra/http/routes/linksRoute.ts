@@ -8,6 +8,7 @@ import { getLink } from "@/app/functions/get-uploads";
 import { exportLinks } from "@/app/functions/export-links-csv";
 import { isLeft, unwrapEither } from "@/infra/shared/either";
 import { deleteLink } from "@/app/functions/delete-link";
+import { getLinkById } from "@/app/functions/get-link-byId";
 
 export const linksRoute: FastifyPluginAsyncZod = async (server) => {
   server.post(
@@ -152,6 +153,46 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
       }
 
       return reply.status(204).send();
+    }
+  );
+
+  server.get(
+    "/links/:id",
+    {
+      schema: {
+        summary: "Buscar link por ID",
+        description: "Retorna um link específico pelo seu ID",
+        params: z.object({
+          id: z.string().nonempty(),
+        }),
+        tags: ["links"],
+        response: {
+          200: z.object({
+            urlId: z.string(),
+            originalUrl: z.string(),
+            shortUrl: z.string(),
+            createdAt: z.date(),
+            qtdAcesso: z.number().optional(), // caso exista esse campo
+          }),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const result = await getLinkById({
+        urlId: request.params.id,
+      });
+
+      if (isLeft(result)) {
+        const unwrapedResult = unwrapEither(result);
+
+        return reply.status(404).send({ message: unwrapedResult.message });
+      }
+
+      const link = unwrapEither(result);
+      return reply.status(200).send(link);
     }
   );
 };
