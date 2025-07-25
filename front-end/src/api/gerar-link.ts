@@ -5,7 +5,7 @@ interface AddLinkRequest {
   shortUrl: string;
 }
 
-export async function addLinks({ originalUrl, shortUrl }: AddLinkRequest) {
+export async function GerarLink({ originalUrl, shortUrl }: AddLinkRequest) {
   const response = await api.post(
     "/links",
     {

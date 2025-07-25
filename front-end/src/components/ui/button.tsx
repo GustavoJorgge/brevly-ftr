@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const buttonVariants = tv({
-  base: "text-white rounded-lg bg-blue-400 disabled:opacity-50 disabled:pointer-events-none",
+  base: "text-white rounded-lg bg-blue-400  rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
 
   variants: {
     size: {

@@ -1,5 +1,5 @@
 import { LinkList } from "../components/link-list";
-import { MainLinks } from "../components/main-links";
+import { LinkForm } from "../components/link-form";
 import { Logo } from "../shared/logo";
 
 export function Home() {
@@ -14,7 +14,7 @@ export function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 items-start">
           <div className="w-full max-w-md">
-            <MainLinks />
+            <LinkForm />
           </div>
 
           <div className="w-full">
