@@ -93,7 +93,11 @@ export function LinkForm() {
           {...register("shortUrl")}
         />
 
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className={isSubmitting ? "cursor-not-allowed opacity-50" : ""}
+        >
           {isSubmitting ? "Salvando..." : "Salvar Link"}
         </Button>
       </form>
