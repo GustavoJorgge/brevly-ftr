@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 export function LinkListHeader() {
   return (
     <div className="flex justify-between items-center border-b border-gray-400 border-grayscale-200 pb-4">
-      <h2 className="text-lg font-bold">Meus links</h2>
+      <h2 className="text-xl font-bold">Meus links</h2>
       <Button className="flex bg-gray-200 text-gray-500 w-1xs">
         <DownloadSimpleIcon size={20} />
         {/* {isGenerating ? (

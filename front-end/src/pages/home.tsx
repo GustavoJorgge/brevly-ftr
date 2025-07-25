@@ -4,16 +4,16 @@ import { Logo } from "../shared/logo";
 
 export function Home() {
   return (
-    <div className="flex flex-col h-dvh w-full items-center justify-center">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
+    <div className="flex flex-col h-dvh w-full items-center justify-around">
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-7">
           <a href="/" title="brev.ly">
             <Logo />
           </a>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-start">
-          <div className="w-full max-w-md">
+        <div className="grid lg:grid-cols-2 item">
+          <div className="">
             <LinkForm />
           </div>
 

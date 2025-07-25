@@ -7,18 +7,26 @@ import * as ReactHookForm from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { Button } from "./ui/button";
+import { useLink } from "../store/link";
 
 // @ts-ignore
 const { useForm } = ReactHookForm;
 
 const geraUrlInput = z.object({
-  originalUrl: z.string(),
-  shortUrl: z.string(),
+  originalUrl: z.url("Informe uma url válida."),
+  shortUrl: z
+    .string()
+    .regex(
+      /^[a-zA-Z0-9]+$/,
+      "Informe uma url minúscula e sem espaços/caracteres especiais."
+    ),
 });
 
 type AddLinkInput = z.infer<typeof geraUrlInput>;
 
 export function LinkForm() {
+  const { addLink } = useLink();
+
   const {
     register,
     handleSubmit,
@@ -36,7 +44,15 @@ export function LinkForm() {
 
   const { mutate: addLinkMutation } = useMutation({
     mutationFn: GerarLink,
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log("Dados da API", data);
+      addLink([
+        {
+          originalUrl: data.originalUrl,
+          shortUrl: data.urlNova,
+          qtdAcesso: data.qtdAcesso,
+        },
+      ]);
       queryClient.invalidateQueries({ queryKey: ["links"] });
       reset();
     },
@@ -49,6 +65,7 @@ export function LinkForm() {
 
   async function handleSubmitForm(data: AddLinkInput) {
     console.log("botao clicado");
+    console.log(data);
     addLinkMutation({
       originalUrl: data.originalUrl,
       shortUrl: data.shortUrl,
@@ -56,8 +73,8 @@ export function LinkForm() {
   }
 
   return (
-    <main className="w-full max-w-[480px] sm:min-w-80 p-6 sm:p-8 flex flex-col justify-center bg-white rounded-lg">
-      <h2 className="flex text-xl text-grayscale-600 mb-3">Novo link</h2>
+    <main className="w-full max-w-[480px] sm:min-w-80 p-8 flex flex-col bg-white rounded-lg">
+      <h2 className="flex text-xl mb-3 font-bold">Novo link</h2>
       <form onSubmit={handleSubmit(handleSubmitForm)} className="flex flex-col">
         <Label text="Link original" />
         <Input
@@ -70,6 +87,7 @@ export function LinkForm() {
 
         <Label text="Link encurtado" />
         <Input
+          prefix="brevy.ly/"
           error={errors.shortUrl?.message || ""}
           disabled={isSubmitting}
           {...register("shortUrl")}

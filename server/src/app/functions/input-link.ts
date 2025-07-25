@@ -1,28 +1,30 @@
-import { db } from "@/infra/db";
-import { z } from "zod";
-import { schema } from "@/infra/db/schemas";
-import { inputLinkToStorage } from "@/infra/storage/input-link-to-storage";
+import { db } from '@/infra/db'
+import { schema } from '@/infra/db/schemas'
+import { inputLinkToStorage } from '@/infra/storage/input-link-to-storage'
+import { z } from 'zod'
 
 const linkInputSchema = z.object({
-  originalUrl: z.string().url(),
-  shortUrl: z.string().url(),
-});
+  originalUrl: z.string().url('O Link completo deve ser um URL Valido!'),
+  shortUrl: z
+    .string()
+    .regex(/^[a-zA-Z0-9_-]+$/, 'Link com caracteres invalidos.'),
+})
 
-type LinkInput = z.infer<typeof linkInputSchema>;
+type LinkInput = z.infer<typeof linkInputSchema>
 
 export async function inputLink(input: LinkInput) {
-  const { originalUrl, shortUrl } = linkInputSchema.parse(input);
+  const { originalUrl, shortUrl } = linkInputSchema.parse(input)
 
   // Salva no Cloudflare R2
   await inputLinkToStorage({
     originalUrl,
     shortUrl,
-    contentType: "application/json",
-  });
+    contentType: 'application/json',
+  })
 
   // Salva no banco
   await db.insert(schema.links).values({
     originalUrl,
     shortUrl,
-  });
+  })
 }

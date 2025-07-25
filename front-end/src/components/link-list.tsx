@@ -1,17 +1,27 @@
-import { LinkIcon } from "@phosphor-icons/react";
+import { useLink } from "../store/link";
 import { LinkListHeader } from "./link-list-header";
+import { LinkUnique } from "./link-list-unique";
 
 export function LinkList() {
+  const { links } = useLink();
+
+  console.log("Links renderizados:", [...links.entries()]);
+
+  const isLinkListEmpty = links.size == 0;
+
   return (
-    <div className="bg-white w-full  max-w-[400px]  sm:min-w-[500px] p-6 sm:p-8 flex flex-col justify-center rounded-lg">
+    <div className="bg-white w-[600px] rounded-lg p-8 flex flex-col gap-2">
       <LinkListHeader />
 
-      <div className="flex flex-col items-center justify-center py-4 px-6">
-        <LinkIcon size={28} color="#74798B" />
-        <p className="text-xs text-gray-500 uppercase mt-3">
-          Ainda não existem links cadastrados
-        </p>
-      </div>
+      {isLinkListEmpty ? (
+        <span>Nenhum link adicionado</span>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {Array.from(links.entries()).map(([linkId, link]) => {
+            return <LinkUnique key={linkId} link={link} />;
+          })}
+        </div>
+      )}
     </div>
   );
 }
