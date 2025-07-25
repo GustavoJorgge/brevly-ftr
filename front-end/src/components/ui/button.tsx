@@ -1,5 +1,6 @@
-import type { ComponentProps } from "react";
+import { Component, type ComponentProps } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
+import { Slot } from "@radix-ui/react-slot";
 
 const buttonVariants = tv({
   base: "text-white rounded-lg bg-blue-400  rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
@@ -17,10 +18,15 @@ const buttonVariants = tv({
   },
 });
 
-export function Button({
-  size,
-  className,
-  ...props
-}: ComponentProps<"button"> & VariantProps<typeof buttonVariants>) {
-  return <button className={buttonVariants({ size, className })} {...props} />;
+type ButtonProps = ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
+
+export function Button({ size, asChild, className, ...props }: ButtonProps) {
+  const Component = asChild ? Slot : "button";
+
+  return (
+    <Component className={buttonVariants({ size, className })} {...props} />
+  );
 }
