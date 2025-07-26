@@ -16,7 +16,7 @@ export function LinkList() {
       {isLinkListEmpty ? (
         <span>Nenhum link adicionado</span>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           {Array.from(links.entries()).map(([linkId, link]) => (
             <LinkUnique key={linkId} link={link} linkId={linkId} />
           ))}

@@ -5,9 +5,7 @@ import { z } from 'zod'
 
 const linkInputSchema = z.object({
   originalUrl: z.string().url('O Link completo deve ser um URL Valido!'),
-  shortUrl: z
-    .string()
-    .regex(/^[a-zA-Z0-9_-]+$/, 'Link com caracteres invalidos.'),
+  shortUrl: z.string(),
 })
 
 type LinkInput = z.infer<typeof linkInputSchema>

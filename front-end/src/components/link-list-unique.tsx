@@ -1,10 +1,7 @@
-// Correção completa: adiciona o `linkId` como prop para poder usar na exclusão
-
 import { CopyIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "./ui/button";
 import { useLink, type Link } from "../store/link";
 import { toast, Toaster } from "sonner";
-import { removeLink } from "../api/remove-link"; // opcional, caso esteja removendo via API
 
 interface LinkUniqueProps {
   link: Link;
@@ -15,19 +12,24 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
   const deleteLink = useLink((state) => state.deleteLink);
 
   function handleCopyLink() {
-    const shortUrl = `brev.ly/${link.shortUrl}`;
-    navigator.clipboard.writeText(shortUrl);
+    // URL simples primeiro para testar
+    const shortUrl = `${window.location.origin}/${link.shortUrl}`;
 
-    toast.success("Link copiado com sucesso!", {
-      description: `O link ${shortUrl} foi copiado para a área de transferência.`,
-    });
+    navigator.clipboard
+      .writeText(shortUrl)
+      .then(() => {
+        toast.success("Link copiado com sucesso!", {
+          description: `O link foi copiado para a área de transferência.`,
+        });
+      })
+      .catch(() => {
+        toast.error("Erro ao copiar link");
+      });
   }
 
   function handleDeleteLink() {
-    deleteLink(linkId); // atualiza o estado local
-    toast.success("Link removido com sucesso!", {
-      description: `O link brev.ly/${link.shortUrl} foi deletado.`,
-    });
+    deleteLink(linkId);
+    toast.success("Link removido com sucesso!");
   }
 
   return (
@@ -35,13 +37,13 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
       <Toaster richColors position="bottom-right" />
       <div className="flex flex-col gap-1">
         <span className="text-xs text-[18px] text-blue-900 font-medium flex items-center gap-1">
-          brev.ly/{link.shortUrl}
+          {window.location.origin}/{link.shortUrl}
         </span>
-        <span className="text-xxs text-gray-500 font-semibold flex gap-1.5 items-center">
+        <span className="text-xxs text-gray-500 font-semibold flex gap-1.5">
           {link.url}
         </span>
       </div>
-      <div className=" flex">
+      <div className="flex flex-col">
         <span className="text-zinc-500 text-xxs">{link.qtdAcesso} acessos</span>
       </div>
 
@@ -50,7 +52,7 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
           className="bg-gray-200 rounded-lg p-2 border-2 border-gray-200 hover:border-2 hover:border-blue-700"
           onClick={handleCopyLink}
         >
-          <CopyIcon className="size-5 text-gray-600 " strokeWidth={1.5} />
+          <CopyIcon className="size-5 text-gray-600" strokeWidth={1.5} />
           <span className="sr-only">Copia URL encurtada</span>
         </Button>
         <Button
