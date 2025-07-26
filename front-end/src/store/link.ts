@@ -11,6 +11,7 @@ type LinkState = {
   addLink: (
     urlList: { originalUrl: string; shortUrl: string; qtdAcesso: number }[]
   ) => void;
+  deleteLink: (linkId: string) => void;
 };
 
 export const useLink = create<LinkState>((set, get) => {
@@ -36,8 +37,17 @@ export const useLink = create<LinkState>((set, get) => {
     });
   }
 
+  function deleteLink(linkId: string) {
+    set((state) => {
+      const newLinks = new Map(state.links);
+      newLinks.delete(linkId);
+      return { links: newLinks };
+    });
+  }
+
   return {
     links: new Map(),
     addLink,
+    deleteLink,
   };
 });

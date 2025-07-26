@@ -1,10 +1,19 @@
 import { api } from "./client";
-import type { getLinkRequest, getLinkResponse } from "./get-link";
+
+interface DeleteLinkRequest {
+  urlId: string;
+}
+
+interface DeleteLinkResponse {
+  urlId: string;
+}
 
 export async function removeLink({
-  shortLink,
-}: getLinkRequest): Promise<getLinkResponse> {
-  const response = await api.get(`/short/${shortLink}`);
+  urlId,
+}: DeleteLinkRequest): Promise<DeleteLinkResponse> {
+  const response = await api.delete("/delete", {
+    data: { urlId }, // axios permite passar o body via `data` para DELETE
+  });
 
   return response.data;
 }

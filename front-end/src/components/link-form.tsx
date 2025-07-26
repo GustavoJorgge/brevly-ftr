@@ -72,7 +72,7 @@ export function LinkForm() {
   async function handleSubmitForm(data: AddLinkInput) {
     addLinkMutation({
       originalUrl: data.originalUrl,
-      shortUrl: data.shortUrl,
+      shortUrl: `brev.ly/${data.shortUrl}`,
     });
   }
 

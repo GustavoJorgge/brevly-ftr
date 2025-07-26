@@ -177,6 +177,44 @@ export const linksRoute: FastifyPluginAsyncZod = async server => {
     },
   )
 
+  server.delete(
+    '/links/short/:shortUrl',
+    {
+      schema: {
+        summary: 'Deletar link por URL encurtada',
+        description: 'Remove um link a partir de sua URL encurtada',
+        params: z.object({
+          shortUrl: z.string().nonempty(),
+        }),
+        response: {
+          204: z.null(),
+          404: z.object({
+            message: z.string(),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { shortUrl } = request.params
+
+      const existingLink = await db
+        .select({ urlId: schema.links.urlId })
+        .from(schema.links)
+        .where(eq(schema.links.shortUrl, shortUrl))
+        .limit(1)
+
+      if (existingLink.length === 0) {
+        return reply.status(404).send({
+          message: 'Link com essa URL encurtada não foi encontrado.',
+        })
+      }
+
+      await db.delete(schema.links).where(eq(schema.links.shortUrl, shortUrl))
+
+      return reply.status(204).send()
+    },
+  )
+
   server.get(
     '/links/:id',
     {

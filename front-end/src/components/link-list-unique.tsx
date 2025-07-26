@@ -1,19 +1,32 @@
+// Correção completa: adiciona o `linkId` como prop para poder usar na exclusão
+
 import { CopyIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "./ui/button";
-import { type Link } from "../store/link";
+import { useLink, type Link } from "../store/link";
 import { toast, Toaster } from "sonner";
+import { removeLink } from "../api/remove-link"; // opcional, caso esteja removendo via API
 
 interface LinkUniqueProps {
   link: Link;
+  linkId: string;
 }
 
-export function LinkUnique({ link }: LinkUniqueProps) {
+export function LinkUnique({ link, linkId }: LinkUniqueProps) {
+  const deleteLink = useLink((state) => state.deleteLink);
+
   function handleCopyLink() {
     const shortUrl = `brev.ly/${link.shortUrl}`;
     navigator.clipboard.writeText(shortUrl);
 
     toast.success("Link copiado com sucesso!", {
       description: `O link ${shortUrl} foi copiado para a área de transferência.`,
+    });
+  }
+
+  function handleDeleteLink() {
+    deleteLink(linkId); // atualiza o estado local
+    toast.success("Link removido com sucesso!", {
+      description: `O link brev.ly/${link.shortUrl} foi deletado.`,
     });
   }
 
@@ -40,9 +53,12 @@ export function LinkUnique({ link }: LinkUniqueProps) {
           <CopyIcon className="size-5 text-gray-600 " strokeWidth={1.5} />
           <span className="sr-only">Copia URL encurtada</span>
         </Button>
-        <Button className="bg-gray-200 rounded-lg p-2 border-2 border-gray-200 hover:border-2 hover:border-blue-700">
-          <TrashIcon className="size-5 text-gray-600  " strokeWidth={1.5} />
-          <span className="sr-only">Download dos Links em CSV</span>
+        <Button
+          className="bg-gray-200 rounded-lg p-2 border-2 border-gray-200 hover:border-blue-700"
+          onClick={handleDeleteLink}
+        >
+          <TrashIcon className="size-5 text-gray-600" strokeWidth={1.5} />
+          <span className="sr-only">Deletar Link encurtado</span>
         </Button>
       </div>
     </div>
