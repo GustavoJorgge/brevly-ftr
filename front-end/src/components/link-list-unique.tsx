@@ -1,6 +1,6 @@
 import { CopyIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "./ui/button";
-import { useLink, type Link } from "../store/link";
+import { type Link } from "../store/link";
 import { toast, Toaster } from "sonner";
 
 interface LinkUniqueProps {

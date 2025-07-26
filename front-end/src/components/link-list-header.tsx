@@ -1,4 +1,4 @@
-import { DownloadSimpleIcon, SpinnerIcon } from "@phosphor-icons/react/ssr";
+import { DownloadSimpleIcon } from "@phosphor-icons/react/ssr";
 import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { exportCSV } from "../api/export-csv";

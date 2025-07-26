@@ -18,14 +18,4 @@
 
   /* Font sizes */
   --font-size-xxs: 0.625rem;
-
-  /* Animations */
-  --animate-border: border 2s linear infinite;
-
-  /* Keyframes */
-  --keyframes-border: {
-    to {
-      --border-angle: 360deg;
-    }
-  }
 }

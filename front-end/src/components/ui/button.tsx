@@ -3,7 +3,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 import { Slot } from "@radix-ui/react-slot";
 
 const buttonVariants = tv({
-  base: "text-white rounded-lg bg-blue-400  rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer",
+  base: "text-white rounded-lg bg-blue-600  rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
 
   variants: {
     size: {

@@ -1,3 +1,4 @@
+import { WarningDiamondIcon } from "@phosphor-icons/react";
 import { forwardRef } from "react";
 
 type BaseInputProps = {
@@ -27,8 +28,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       return (
         <div>
           <div
-            className={`flex items-center border border-grayscale-300 rounded-md px-4 mb-2 focus-within:ring-2 focus-within:ring-blue-base ${
-              error ? "border-danger" : ""
+            className={`flex items-center border border-gray-300 active:border-blue-800 focus:border-blue-800 rounded-md px-4 mb-2  ${
+              error
+                ? "border-red-700 active:border-red-700 focus:border-red-700"
+                : ""
             } ${className}`}
           >
             <span className="text-grayscale-400">{prefix}</span>
@@ -36,25 +39,38 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               ref={ref}
               type="text"
               disabled={disabled}
-              className="w-full h-12 outline-none border-none bg-transparent disabled:opacity-50"
+              className="w-full h-12 outline-none bg-transparent disabled:opacity-50"
               {...inputProps}
             />
           </div>
+          {error && (
+            <span className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+              <WarningDiamondIcon size={20} color="#B12C4D" />
+              {error}
+            </span>
+          )}
         </div>
       );
     }
 
-    // Input regular
     return (
       <div>
         <input
           ref={ref}
           disabled={disabled}
-          className={`w-full h-12 border border-grayscale-300 rounded-lg p-4 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-base placeholder:text-grayscale-400 disabled:opacity-50 ${
-            error ? "border-danger" : ""
+          className={`w-full h-12 border border-gray-300 active:border-blue-800 focus:border-blue-800 rounded-lg p-4 mb-2 focus:outline-none placeholder:text-grayscale-400   ${
+            error
+              ? "border-red-700 active:border-red-700 focus:border-red-700"
+              : ""
           } ${className}`}
           {...props}
         />
+        {error && (
+          <span className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+            <WarningDiamondIcon size={20} color="#B12C4D" />
+            {error}
+          </span>
+        )}
       </div>
     );
   }
