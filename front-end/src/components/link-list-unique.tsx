@@ -12,7 +12,6 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
   const deleteLink = useLink((state) => state.deleteLink);
 
   function handleCopyLink() {
-    // URL simples primeiro para testar
     const shortUrl = `${window.location.origin}/${link.shortUrl}`;
 
     navigator.clipboard
@@ -36,9 +35,12 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
     <div className="p-2 rounded-lg flex gap-4 overflow-hidden items-center justify-between">
       <Toaster richColors position="bottom-right" />
       <div className="flex flex-col gap-1">
-        <span className="text-xs text-[18px] text-blue-900 font-medium flex items-center gap-1">
+        <a
+          href={`${link.shortUrl}`}
+          className="text-xs text-[18px] text-blue-900 font-medium flex items-center gap-1 hover:underline"
+        >
           {window.location.origin}/{link.shortUrl}
-        </span>
+        </a>
         <span className="text-xxs text-gray-500 font-semibold flex gap-1.5">
           {link.url}
         </span>

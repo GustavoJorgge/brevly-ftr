@@ -27,7 +27,13 @@ export interface getLinkResponse {
 export async function getLink({
   shortLink,
 }: getLinkRequest): Promise<getLinkResponse> {
-  const response = await api.get(`/short/${shortLink}`);
+  const response = await api.get(`/links/short/${shortLink}`);
+  const data = response.data;
 
-  return response.data;
+  // Mapeia os campos do backend para o que o frontend espera
+  return {
+    id: data.urlId ?? data.id,
+    originalLink: data.originalUrl ?? data.originalLink,
+    accessCount: data.qtdAcesso ?? data.accessCount ?? 0,
+  };
 }
