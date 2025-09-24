@@ -54,36 +54,38 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
   }
 
   return (
-    <div className="p-1 rounded-lg flex gap-4 items-center">
+    <div className="p-1 rounded-lg flex gap-2 sm:gap-4 items-center">
       <div className="flex flex-col gap-1 overflow-hidden flex-1">
         <a
           href={`${link.shortUrl}`}
-          className="text-xs text-[18px] text-blue-900 font-medium hover:underline"
+          className="text-xs sm:text-[18px] text-blue-900 font-medium hover:underline"
         >
           {window.location.origin}/{link.shortUrl}
         </a>
-        <span className="text-xxs text-gray-500 font-semibold flex gap-1.5">
+        <span className="text-[10px] sm:text-xs text-gray-500 font-semibold flex gap-1.5">
           {link.url}
         </span>
       </div>
       <div className="flex flex-col">
-        <span className="text-zinc-500 text-xxs">{link.qtdAcesso} acessos</span>
+        <span className="text-[10px] sm:text-xs text-zinc-500">
+          {link.qtdAcesso} acessos
+        </span>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-1 sm:gap-2">
         <Button
-          className="bg-gray-200 rounded-lg p-2 border-2 border-gray-200 hover:border-2 hover:border-blue-700"
+          className="bg-gray-200 rounded-lg p-1 sm:p-2 border-2 border-gray-200 hover:border-2 hover:border-blue-700"
           onClick={handleCopyLink}
         >
-          <CopyIcon className="size-5 text-gray-600" strokeWidth={1.5} />
+          <CopyIcon className="size-4 sm:size-5 text-gray-600" strokeWidth={1.5} />
           <span className="sr-only">Copia URL encurtada</span>
         </Button>
         <Button
-          className="bg-gray-200 rounded-lg p-2 border-2 border-gray-200 hover:border-blue-700"
+          className="bg-gray-200 rounded-lg p-1 sm:p-2 border-2 border-gray-200 hover:border-blue-700"
           onClick={handleDeleteLink}
           disabled={isPending}
         >
-          <TrashIcon className="size-5 text-gray-600" strokeWidth={1.5} />
+          <TrashIcon className="size-4 sm:size-5 text-gray-600" strokeWidth={1.5} />
           <span className="sr-only">Deletar Link encurtado</span>
         </Button>
       </div>

@@ -26,7 +26,7 @@ export function LinkList() {
           </span>
         </div>
       ) : (
-        <div className="flex flex-col">
+        <div className="flex flex-col max-h-[400px] overflow-y-auto scrollbar-thin scrollbar-track-gray-100 scrollbar-thumb-gray-300">
           {Array.from(links.entries()).map(([linkId, link]) => (
             <LinkUnique key={linkId} link={link} linkId={linkId} />
           ))}
