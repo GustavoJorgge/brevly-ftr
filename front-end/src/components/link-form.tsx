@@ -9,6 +9,7 @@ import { AxiosError } from "axios";
 import { Button } from "./ui/button";
 import { useLink } from "../store/link";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const { useForm } = ReactHookForm;
 
@@ -56,11 +57,23 @@ export function LinkForm() {
         },
       ]);
       queryClient.invalidateQueries({ queryKey: ["links"] });
+      toast.success("Link encurtado com sucesso!");
       reset();
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
-        console.error("Erro:", error.response?.data.error);
+        const errorMessage = error.response?.data.error;
+
+        if (error.response?.status === 409) {
+          toast.error("Erro ao encurtar link", {
+            description:
+              "Este link encurtado já existe. Por favor, escolha outro.",
+          });
+        } else {
+          toast.error("Erro ao encurtar link", {
+            description: errorMessage || "Ocorreu um erro inesperado",
+          });
+        }
       }
     },
   });
@@ -78,7 +91,7 @@ export function LinkForm() {
 
   return (
     <main className="w-full max-w-[480px] sm:min-w-80 p-8 flex flex-col bg-white rounded-lg">
-      <h2 className="flex text-xl mb-3 font-bold">Novo link</h2>
+      <h2 className="flex text-xl text-gray-600 mb-3 font-bold">Novo link</h2>
       <form
         onSubmit={handleSubmit(handleSubmitForm)}
         className="flex flex-col gap-4"

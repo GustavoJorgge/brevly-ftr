@@ -30,10 +30,10 @@ export function LinkListHeader() {
 
   return (
     <div className="flex justify-between items-center border-b border-gray-400 border-grayscale-200 pb-4">
-      <h2 className="text-xl font-bold">Meus links</h2>
+      <h2 className="text-xl text-gray-600 font-bold">Meus links</h2>
       <Button
         onClick={handleDownloadCSV}
-        className="flex bg-gray-200 text-gray-400 w-1xs gap-2 hover:bg-gray-300 hover:text-gray-500"
+        className="flex bg-gray-200 text-gray-500 w-1xs gap-2 hover:bg-gray-300 hover:text-gray-500"
         disabled={isLoadingCSVDownload}
       >
         <DownloadSimpleIcon size={20} />
