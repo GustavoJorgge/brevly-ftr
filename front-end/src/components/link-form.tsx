@@ -57,7 +57,7 @@ export function LinkForm() {
         },
       ]);
       queryClient.invalidateQueries({ queryKey: ["links"] });
-      toast.success("Link encurtado com sucesso!");
+      toast.success("Link encurtado gerado com sucesso!");
       reset();
     },
     onError: (error) => {
@@ -90,7 +90,7 @@ export function LinkForm() {
   }
 
   return (
-    <main className="w-full max-w-[480px] sm:min-w-80 p-8 flex flex-col bg-white rounded-lg">
+    <main className="w-full max-w-[700px] min-w-[300px] sm:min-w-80 p-8 flex flex-col bg-white rounded-lg">
       <h2 className="flex text-xl text-gray-600 mb-3 font-bold">Novo link</h2>
       <form
         onSubmit={handleSubmit(handleSubmitForm)}

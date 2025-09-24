@@ -26,26 +26,26 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     if ("prefix" in props && props.prefix) {
       const { prefix, ...inputProps } = props;
       return (
-        <div>
+        <div className="w-full">
           <div
-            className={`flex items-center border border-gray-300 active:border-blue-800 focus:border-blue-800 rounded-md px-4 mb-2  ${
+            className={`flex items-center border border-gray-300 active:border-blue-800 focus:border-blue-800 rounded-md px-2 sm:px-4 mb-2 ${
               error
                 ? "border-red-700 active:border-red-700 focus:border-red-700"
                 : ""
             } ${className}`}
           >
-            <span className="text-grayscale-400">{prefix}</span>
+            <span className="text-grayscale-400 text-sm sm:text-base">{prefix}</span>
             <input
               ref={ref}
               type="text"
               disabled={disabled}
-              className="w-full h-12 outline-none bg-transparent disabled:opacity-50"
+              className="w-full h-8 sm:h-12 text-sm sm:text-base outline-none bg-transparent disabled:opacity-50"
               {...inputProps}
             />
           </div>
           {error && (
-            <span className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-              <WarningDiamondIcon size={20} color="#B12C4D" />
+            <span className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-2">
+              <WarningDiamondIcon size={16} className="sm:size-20" color="#B12C4D" />
               {error}
             </span>
           )}
@@ -54,11 +54,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     }
 
     return (
-      <div>
+      <div className="w-full">
         <input
           ref={ref}
           disabled={disabled}
-          className={`w-full h-12 border border-gray-300 active:border-blue-800 focus:border-blue-800 rounded-lg p-4 mb-2 focus:outline-none placeholder:text-grayscale-400   ${
+          className={`w-full h-8 sm:h-12 text-sm sm:text-base border border-gray-300 active:border-blue-800 focus:border-blue-800 rounded-lg px-2 sm:px-4 py-1 sm:py-4 mb-2 focus:outline-none placeholder:text-grayscale-400 ${
             error
               ? "border-red-700 active:border-red-700 focus:border-red-700"
               : ""
@@ -66,8 +66,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {error && (
-          <span className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-            <WarningDiamondIcon size={20} color="#B12C4D" />
+          <span className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-2">
+            <WarningDiamondIcon size={16} className="sm:size-20" color="#B12C4D" />
             {error}
           </span>
         )}

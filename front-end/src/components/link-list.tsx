@@ -11,7 +11,7 @@ export function LinkList() {
   const isLinkListEmpty = links.size == 0;
 
   return (
-    <div className="bg-white w-full rounded-lg p-8 flex flex-col gap-2">
+    <div className="bg-white max-w-[700px] min-w-[300px] w-full rounded-lg p-8 flex flex-col gap-2">
       <LinkListHeader />
 
       {isLinkListEmpty ? (

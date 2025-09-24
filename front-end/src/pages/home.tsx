@@ -4,20 +4,20 @@ import { Logo } from "../shared/logo";
 
 export function Home() {
   return (
-    <div className="flex flex-col h-dvh w-full items-center justify-around">
-      <div className="max-w-5xl mx-auto w-full px-4">
+    <div className="flex flex-col min-h-screen w-full items-center justify-around">
+      <div className="max-w-6xl w-full px-4 justify-center flex flex-col mt-10 mb-10">
         <div className="mb-7">
           <a href="/" title="brev.ly">
             <Logo />
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          <div className="md:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="w-full lg:col-span-2">
             <LinkForm />
           </div>
 
-          <div className="md:col-span-1 lg:col-span-2">
+          <div className="w-full lg:col-span-3">
             <LinkList />
           </div>
         </div>

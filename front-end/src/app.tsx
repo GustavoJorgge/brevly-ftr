@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 
 export function App() {
   return (
-    <main className="h-dvh flex flex-col items-center justify-center p-10 overflow-auto">
+    <main className="h-dvh flex flex-col items-center justify-center overflow-auto">
       <Toaster richColors position="bottom-right" />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
