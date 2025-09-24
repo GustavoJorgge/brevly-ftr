@@ -1,7 +1,9 @@
 import { CopyIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "./ui/button";
 import { useLink, type Link } from "../store/link";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteLink } from "../api/remove-link";
 
 interface LinkUniqueProps {
   link: Link;
@@ -9,7 +11,28 @@ interface LinkUniqueProps {
 }
 
 export function LinkUnique({ link, linkId }: LinkUniqueProps) {
-  const deleteLink = useLink((state) => state.deleteLink);
+  const deleteLocalLink = useLink((state) => state.deleteLink);
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteLinkMutation, isPending } = useMutation({
+    mutationFn: () => deleteLink(link.shortUrl),
+    onSuccess: () => {
+      deleteLocalLink(linkId);
+      queryClient.invalidateQueries({ queryKey: ["links"] });
+      toast.success("Link removido com sucesso!");
+    },
+    onError: (error: any) => {
+      if (error.response?.status === 404) {
+        toast.error("Link não encontrado", {
+          description: error.response.data.message,
+        });
+      } else {
+        toast.error("Erro ao remover link", {
+          description: "Não foi possível remover o link. Tente novamente.",
+        });
+      }
+    },
+  });
 
   function handleCopyLink() {
     const shortUrl = `${window.location.origin}/${link.shortUrl}`;
@@ -27,13 +50,11 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
   }
 
   function handleDeleteLink() {
-    deleteLink(linkId);
-    toast.success("Link removido com sucesso!");
+    deleteLinkMutation();
   }
 
   return (
     <div className="p-1 rounded-lg flex gap-4 items-center">
-      <Toaster richColors position="bottom-right" />
       <div className="flex flex-col gap-1 overflow-hidden flex-1">
         <a
           href={`${link.shortUrl}`}
@@ -60,6 +81,7 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
         <Button
           className="bg-gray-200 rounded-lg p-2 border-2 border-gray-200 hover:border-blue-700"
           onClick={handleDeleteLink}
+          disabled={isPending}
         >
           <TrashIcon className="size-5 text-gray-600" strokeWidth={1.5} />
           <span className="sr-only">Deletar Link encurtado</span>

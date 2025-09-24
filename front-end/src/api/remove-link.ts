@@ -17,3 +17,8 @@ export async function removeLink({
 
   return response.data;
 }
+
+// Função deletar link por short URL
+export async function deleteLink(shortUrl: string): Promise<void> {
+  await api.delete(`/links/short/${shortUrl}`);
+}

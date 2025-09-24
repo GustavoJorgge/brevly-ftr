@@ -3,12 +3,14 @@ import { Home } from "./pages/home";
 import { Redirect } from "./pages/redirect";
 import { NotFound } from "./pages/NotFound";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
 export function App() {
   return (
     <main className="h-dvh flex flex-col items-center justify-center p-10 overflow-auto">
+      <Toaster richColors position="bottom-right" />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
