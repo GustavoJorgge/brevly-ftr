@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 
 export function App() {
   return (
-    <main className="h-dvh flex flex-col items-center justify-center p-10">
+    <main className="h-dvh flex flex-col items-center justify-center p-10 overflow-auto">
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>

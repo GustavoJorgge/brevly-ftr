@@ -32,12 +32,12 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
   }
 
   return (
-    <div className="p-2 rounded-lg flex gap-4 overflow-hidden items-center justify-between">
+    <div className="p-1 rounded-lg flex gap-4 items-center">
       <Toaster richColors position="bottom-right" />
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 overflow-hidden flex-1">
         <a
           href={`${link.shortUrl}`}
-          className="text-xs text-[18px] text-blue-900 font-medium flex items-center gap-1 hover:underline"
+          className="text-xs text-[18px] text-blue-900 font-medium hover:underline"
         >
           {window.location.origin}/{link.shortUrl}
         </a>
