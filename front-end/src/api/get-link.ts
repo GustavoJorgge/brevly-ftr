@@ -1,39 +1,35 @@
 import { api } from "./client";
 
-export interface getAllLinksResponse {
+export interface GetAllLinksResponse {
   links: {
-    id: string;
-    originalLink: string;
-    shortLink: string;
-    accessCount: number;
+    urlId: string;
+    originalUrl: string;
+    shortUrl: string;
+    qtdAcesso: number;
+    createdAt: string;
   }[];
 }
 
-export async function getAllLinks(): Promise<getAllLinksResponse["links"]> {
-  const response = await api.get("/links");
-  return response.data.links;
+export async function getAllLinks(): Promise<GetAllLinksResponse> {
+  const response = await api.get<GetAllLinksResponse>("/links");
+  return response.data;
 }
 
-export interface getLinkRequest {
-  shortLink: string;
+export interface GetLinkRequest {
+  shortUrl: string;
 }
 
-export interface getLinkResponse {
-  id: string;
-  originalLink: string;
-  accessCount: number;
+export interface GetLinkResponse {
+  urlId: string;
+  originalUrl: string;
+  shortUrl: string;
+  qtdAcesso: number;
+  createdAt: string;
 }
 
 export async function getLink({
-  shortLink,
-}: getLinkRequest): Promise<getLinkResponse> {
-  const response = await api.get(`/links/short/${shortLink}`);
-  const data = response.data;
-
-  // Mapeia os campos do backend para o que o frontend espera
-  return {
-    id: data.urlId ?? data.id,
-    originalLink: data.originalUrl ?? data.originalLink,
-    accessCount: data.qtdAcesso ?? data.accessCount ?? 0,
-  };
+  shortUrl,
+}: GetLinkRequest): Promise<GetLinkResponse> {
+  const response = await api.get<GetLinkResponse>(`/links/short/${shortUrl}`);
+  return response.data;
 }

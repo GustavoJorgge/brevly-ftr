@@ -34,7 +34,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 : ""
             } ${className}`}
           >
-            <span className="text-grayscale-400 text-sm sm:text-base">{prefix}</span>
+            <span className="text-grayscale-400 text-sm sm:text-base">
+              {prefix}
+            </span>
             <input
               ref={ref}
               type="text"
@@ -45,7 +47,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </div>
           {error && (
             <span className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-2">
-              <WarningDiamondIcon size={16} className="sm:size-20" color="#B12C4D" />
+              <WarningDiamondIcon
+                size={16}
+                className="sm:size-5"
+                color="#B12C4D"
+              />
               {error}
             </span>
           )}
@@ -67,7 +73,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         />
         {error && (
           <span className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-2">
-            <WarningDiamondIcon size={16} className="sm:size-20" color="#B12C4D" />
+            <WarningDiamondIcon
+              size={16}
+              className="sm:size-5"
+              color="#B12C4D"
+            />
             {error}
           </span>
         )}

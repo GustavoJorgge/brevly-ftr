@@ -1,7 +1,8 @@
 import { create } from "zustand";
 
 export type Link = {
-  url: string;
+  url?: string;
+  originalUrl?: string;
   shortUrl: string;
   qtdAcesso: number;
 };

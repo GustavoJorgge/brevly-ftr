@@ -77,7 +77,10 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
           className="bg-gray-200 rounded-lg p-1 sm:p-2 border-2 border-gray-200 hover:border-2 hover:border-blue-700"
           onClick={handleCopyLink}
         >
-          <CopyIcon className="size-4 sm:size-5 text-gray-600" strokeWidth={1.5} />
+          <CopyIcon
+            className="size-4 sm:size-5 text-gray-600"
+            strokeWidth={1.5}
+          />
           <span className="sr-only">Copia URL encurtada</span>
         </Button>
         <Button
@@ -85,7 +88,10 @@ export function LinkUnique({ link, linkId }: LinkUniqueProps) {
           onClick={handleDeleteLink}
           disabled={isPending}
         >
-          <TrashIcon className="size-4 sm:size-5 text-gray-600" strokeWidth={1.5} />
+          <TrashIcon
+            className="size-4 sm:size-5 text-gray-600"
+            strokeWidth={1.5}
+          />
           <span className="sr-only">Deletar Link encurtado</span>
         </Button>
       </div>
