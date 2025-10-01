@@ -1,12 +1,10 @@
-import { PassThrough, Transform } from "node:stream";
-import { pipeline } from "node:stream/promises";
-import { db, pg } from "@/infra/db";
+import { db } from "@/infra/db";
 import { schema } from "@/infra/db/schemas";
-import { type Either, makeRight } from "@/infra/shared/either";
 import { exportLinksCsvStorage } from "@/infra/storage/export-links-csv";
-import { stringify } from "csv-stringify";
-import { ilike } from "drizzle-orm";
+import { stringify } from "csv-stringify/sync";
+import { Readable } from "node:stream";
 import { z } from "zod";
+import { makeRight } from "@/infra/shared/either";
 
 const exportLinksInput = z.object({
   searchQuery: z.string().optional(),
@@ -20,10 +18,11 @@ type ExportLinksOutput = {
 
 export async function exportLinks(
   input: ExportLinksInput
-): Promise<Either<never, ExportLinksOutput>> {
+): Promise<ReturnType<typeof makeRight<ExportLinksOutput>>> {
   const { searchQuery } = exportLinksInput.parse(input);
 
-  const { sql, params } = db
+  // Busca todos os links (pode adaptar paginação se necessário)
+  const rows = await db
     .select({
       urlId: schema.links.urlId,
       originalUrl: schema.links.originalUrl,
@@ -32,53 +31,47 @@ export async function exportLinks(
       qtdAcesso: schema.links.qtdAcesso,
     })
     .from(schema.links)
-    .where(
-      searchQuery
-        ? ilike(schema.links.originalUrl, `%${searchQuery}%`)
-        : undefined
-    )
-    .toSQL();
+    .orderBy(schema.links.createdAt);
 
-  const cursor = pg.unsafe(sql, params as string[]).cursor(1);
+  // Mapeia e garante strings para evitar colunas vazias
+  const records = rows.map((r) => ({
+    ID: r.urlId ?? "",
+    "URL Original": r.originalUrl ?? "",
+    "URL Encurtada": r.shortUrl ?? "",
+    "Data de Criação": r.createdAt
+      ? new Date(r.createdAt).toLocaleString("pt-BR")
+      : "",
+    "Quantidade de Acessos":
+      typeof r.qtdAcesso === "number" ? String(r.qtdAcesso) : "0",
+  }));
 
-  const csv = stringify({
-    delimiter: ",",
+  // Gera CSV com cabeçalho
+  const csvString = stringify(records, {
     header: true,
     columns: [
-      { key: "urlId", header: "ID" },
-      { key: "originalUrl", header: "URL Original" },
-      { key: "shortUrl", header: "URL Encurtada" },
-      { key: "createdAt", header: "Data de Criação" },
-      { key: "qtdAcesso", header: "Quantidade de Acessos" },
+      "ID",
+      "URL Original",
+      "URL Encurtada",
+      "Data de Criação",
+      "Quantidade de Acessos",
     ],
   });
 
-  const uploadToStorageStream = new PassThrough();
+  // Adiciona BOM UTF-8 para evitar problemas com acentuação no Excel
+  const bom = Buffer.from("\uFEFF", "utf8");
+  const csvBuffer = Buffer.concat([bom, Buffer.from(csvString, "utf8")]);
 
-  await pipeline(
-    cursor,
-    new Transform({
-      objectMode: true,
-      transform(chunks: unknown[], _, callback) {
-        console.log(`Processando ${chunks.length} registros`);
-        for (const chunk of chunks) {
-          this.push(chunk);
-        }
-        callback();
-      },
-    }),
-    csv,
-    uploadToStorageStream
-  );
+  // Cria stream legível a partir do buffer
+  const stream = Readable.from(csvBuffer);
 
-  const uploadPromise = exportLinksCsvStorage({
-    contentType: "text/csv",
+  // Envia para storage
+  const fileName = `links-${new Date().toISOString()}.csv`;
+  const { url } = await exportLinksCsvStorage({
+    fileName,
+    contentStream: stream,
+    contentType: "text/csv; charset=utf-8",
     folder: "downloads",
-    fileName: `${new Date().toISOString()}-links.csv`,
-    contentStream: uploadToStorageStream,
   });
-
-  const { url } = await uploadPromise;
 
   return makeRight({ reportUrl: url });
 }
