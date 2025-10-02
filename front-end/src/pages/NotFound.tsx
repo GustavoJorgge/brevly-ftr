@@ -13,7 +13,7 @@ export function NotFound() {
         <span className="typography-md text-gray-500">
           O link que você está tentando acessar não existe, foi removido ou é
           uma URL inválida. Saiba mais em{" "}
-          <a className="typography-md text-blue">abrev.ly</a>
+          <a className="typography-md text-blue">brev.ly</a>
         </span>
       </div>
     </div>

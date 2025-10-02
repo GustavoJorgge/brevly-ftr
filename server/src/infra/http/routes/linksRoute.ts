@@ -383,4 +383,55 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
       }
     }
   );
+
+  server.post(
+    "/links/:shortUrl/access",
+    {
+      schema: {
+        params: z.object({ shortUrl: z.string().nonempty() }),
+        response: {
+          200: z.object({
+            originalUrl: z.string(),
+            qtdAcesso: z.number(),
+          }),
+          404: z.object({ message: z.string() }),
+        },
+      },
+    },
+    async (request, reply) => {
+      const { shortUrl } = request.params;
+
+      try {
+        const result = await db.transaction(async (tx) => {
+          const found = await tx
+            .select({
+              originalUrl: schema.links.originalUrl,
+              qtdAcesso: schema.links.qtdAcesso,
+            })
+            .from(schema.links)
+            .where(eq(schema.links.shortUrl, shortUrl))
+            .limit(1);
+
+          if (found.length === 0) return null;
+
+          const newCount = (found[0].qtdAcesso ?? 0) + 1;
+
+          await tx
+            .update(schema.links)
+            .set({ qtdAcesso: newCount })
+            .where(eq(schema.links.shortUrl, shortUrl));
+
+          return { originalUrl: found[0].originalUrl, qtdAcesso: newCount };
+        });
+
+        if (!result) {
+          return reply.status(404).send({ message: "Link encurtado não encontrado" });
+        }
+
+        return reply.status(200).send(result);
+      } catch (err) {
+        return reply.status(500).send({ message: "Erro interno do servidor" });
+      }
+    }
+  );
 };
