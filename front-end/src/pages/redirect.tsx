@@ -10,23 +10,23 @@ export function Redirect() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["get-link", shortLink],
-    queryFn: () => getLink({ shortLink: shortLink ?? "" }),
+    queryFn: () => getLink({ shortUrl: shortLink! }),
     enabled: !!shortLink,
   });
 
   useEffect(() => {
-    if (data?.originalLink) {
+    if (data?.originalUrl) {
       const timeout = setTimeout(() => {
-        window.location.href = data.originalLink;
+        window.location.href = data.originalUrl;
       }, 2000);
       return () => clearTimeout(timeout);
     }
-  }, [data?.originalLink]);
+  }, [data?.originalUrl]);
 
   return (
     <div className="h-screen flex justify-center items-center">
       <div className="bg-gray-100 px-12 py-16 flex flex-col items-center gap-6 rounded-lg max-w-[580px]">
-        {!isLoading && !data?.originalLink ? (
+        {!isLoading && !data?.originalUrl ? (
           <>
             <div className="h-20">
               <img
@@ -55,11 +55,11 @@ export function Redirect() {
             <h1 className="font-bold text-xl">Redirecionando...</h1>
             <p className="text-center text-sm text-gray-500">
               O link será aberto automaticamente em alguns instantes. <br />
-              {data?.originalLink && (
+              {data?.originalUrl && (
                 <>
                   Não foi redirecionado?{" "}
                   <a
-                    href={data.originalLink}
+                    href={data.originalUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 underline"
