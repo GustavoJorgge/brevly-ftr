@@ -9,6 +9,7 @@ export function LinkList() {
     queryKey: ["links"],
     queryFn: getAllLinks,
   });
+  console.log(data);
 
   if (isLoading) {
     return (

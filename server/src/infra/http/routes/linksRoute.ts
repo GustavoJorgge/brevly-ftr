@@ -94,6 +94,7 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
                 originalUrl: z.string(),
                 shortUrl: z.string(),
                 createdAt: z.date(),
+                qtdAcesso: z.number().optional(),
               })
             ),
           }),
@@ -101,18 +102,30 @@ export const linksRoute: FastifyPluginAsyncZod = async (server) => {
       },
     },
     async (request, reply) => {
-      const { page, pageSize, searchQuery, sortBy, sortDirection } =
-        request.query;
-
-      const links = await getLink({
-        page,
-        pageSize,
+      const {
+        page = 1,
+        pageSize = 20,
         searchQuery,
-        sortBy,
-        sortDirection,
-      });
+        sortBy = "createdAt",
+        sortDirection = "desc",
+      } = request.query;
 
-      return reply.status(200).send({ links });
+      const offset = (Number(page) - 1) * Number(pageSize);
+
+      const rows = await db
+        .select({
+          urlId: schema.links.urlId,
+          originalUrl: schema.links.originalUrl,
+          shortUrl: schema.links.shortUrl,
+          createdAt: schema.links.createdAt,
+          qtdAcesso: schema.links.qtdAcesso,
+        })
+        .from(schema.links)
+        .orderBy(desc(schema.links.createdAt))
+        .limit(Number(pageSize))
+        .offset(Number(offset));
+
+      return reply.status(200).send({ links: rows });
     }
   );
 
